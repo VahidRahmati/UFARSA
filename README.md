@@ -1,0 +1,2 @@
+# UFASAR
+This repository contains the Matlab codes implementing the (Ultra-fast Accurate Spiking Activity Reconstruction). UFASAR is a novel, heuristic model-free-type method which enables an ultra-fast, accurate, near-automatic reconstruction of spiking activities from noisy calcium imaging data. UFASAR has been introduced in this paper (submitted on December 2017): “Ultra-Fast Accurate Spiking Activity Reconstruction from Noisy Calcium Imaging Data”; Vahid Rahmati, Knut Kirmse, Knut Holthoff, Stefan J. Kiebel.
