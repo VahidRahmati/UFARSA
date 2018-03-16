@@ -7,5 +7,5 @@ You can readily setup and then apply UFARSA to your recorded fluorescence traces
 <br />    
 
 --------------------------------------------------------------------------------------------------------------------------------------
-### Files history
-User_Guide.pdf was updated: in particular, by adding a hint on the scaled firing rate vectors (see "Useful hints" section).
+### Files history:
+User_Guide.pdf updated: in particular, by adding a hint on the scaled firing rate vectors (see "Useful hints" section).
