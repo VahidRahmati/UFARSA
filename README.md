@@ -5,3 +5,7 @@ This repository contains the Matlab codes implementing the UFARSA (Ultra-fast Ac
 
 You can readily setup and then apply UFARSA to your recorded fluorescence traces (time-courses); please see the **User_Guide.pdf** and the two **demo scripts** in this repository.<br />
 <br />    
+
+--------------------------------------------------------------------------------------------------------------------------------------
+### Files history
+User_Guide.pdf was updated: in particular, by adding a hint on the scaled firing rate vectors (see "Useful hints" section).
