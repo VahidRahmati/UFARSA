@@ -1,6 +1,6 @@
-function [output_UFARSA opt_out] = reoncstruction_UFARSA(fluors,opt)
+function [output_UFARSA, opt_out] = reconstruction_UFARSA(fluors,opt)
 
-% [output_UFARSA opt_out] = reoncstruction_UFARSA(fluors,opt)
+% [output_UFARSA opt_out] = reconstruction_UFARSA(fluors,opt)
 %
 % Reconstruction of spiking activities from the smoothed fluorescence trace.
 % The main steps included in this function are used for: Setting the leading threshold, Reconstruction,
@@ -303,84 +303,94 @@ idx_onset_L(Amps < thr_leading) = 0;
 
 if sum(idx_onset_L) ~= 0
     ZeroEvent_flag = 0;
-else
-    ZeroEvent_flag = 1;
-end
-
-idx_end_L = idx_end;
-idx_end_L(Amps < thr_leading) = 0;
-F_onset_L = F_onset;
-F_onset_L(idx_onset_L==0) = 0;
-Amps_L = Amps;
-Amps_L(idx_onset_L==0) = 0;
-
-idx_onset_actu_L = idx_onset_L(idx_onset_L~=0);
-idx_end_actu_L = idx_end_L(idx_end_L~=0);
-Amps_actu_L = Amps_L(Amps_L~=0);
-
-rec_flag = ones(nTargets,1); % flag of reconstructed events
-rec_flag(idx_onset_L==0) = 0; 
-
-idx_onset_B = idx_onset;
-idx_onset_B(idx_onset_L~=0) = 0;
-
-if sum(idx_onset_B)~=0
     
-    % Setting the interior threshold step
-    thr_wburst = opt.scale_burstAmp * compute_minAmpL( Amps_actu_L, thr_leading, opt );
-    thr_wburst =  max( min(opt.scale_min_interior_thr,opt.scale_NoiseSTD) * opt.std_noise, thr_wburst ); % the interior threshold
+    idx_end_L = idx_end;
+    idx_end_L(Amps < thr_leading) = 0;
+    F_onset_L = F_onset;
+    F_onset_L(idx_onset_L==0) = 0;
+    Amps_L = Amps;
+    Amps_L(idx_onset_L==0) = 0;
     
-    % check the amplitudes of the candidates for interior events 
-    idx_onset_B(Amps <thr_wburst) = 0;
+    idx_onset_actu_L = idx_onset_L(idx_onset_L~=0);
+    idx_end_actu_L = idx_end_L(idx_end_L~=0);
+    Amps_actu_L = Amps_L(Amps_L~=0);
     
-    Amps_L_aux = Amps_L;
-    F_onset_L_aux = F_onset_L;
-    indices_new = [];
-    indices_old = NaN;
+    rec_flag = ones(nTargets,1); % flag of reconstructed events
+    rec_flag(idx_onset_L==0) = 0;
     
-    while ~isequal(indices_new, indices_old)
-        indices_old = indices_new;
-        indices_new = find(([ 0; rec_flag(1:end-1)] & idx_onset_B)~=0);
-        rec_flag(indices_new) = 1;
+    idx_onset_B = idx_onset;
+    idx_onset_B(idx_onset_L~=0) = 0;
+    
+    if sum(idx_onset_B)~=0
         
-        Amps_L_aux(indices_new) = Amps_L_aux(indices_new-1);
-        F_onset_L_aux(indices_new) = F_onset_L_aux(indices_new-1);
+        % Setting the interior threshold step
+        thr_wburst = opt.scale_burstAmp * compute_minAmpL( Amps_actu_L, thr_leading, opt );
+        thr_wburst =  max( min(opt.scale_min_interior_thr,opt.scale_NoiseSTD) * opt.std_noise, thr_wburst ); % the interior threshold
+        
+        % check the amplitudes of the candidates for interior events
+        idx_onset_B(Amps <thr_wburst) = 0;
+        
+        Amps_L_aux = Amps_L;
+        F_onset_L_aux = F_onset_L;
+        indices_new = [];
+        indices_old = NaN;
+        
+        while ~isequal(indices_new, indices_old)
+            indices_old = indices_new;
+            indices_new = find(([ 0; rec_flag(1:end-1)] & idx_onset_B)~=0);
+            rec_flag(indices_new) = 1;
+            
+            Amps_L_aux(indices_new) = Amps_L_aux(indices_new-1);
+            F_onset_L_aux(indices_new) = F_onset_L_aux(indices_new-1);
+        end
+        
+        idx_onset_B(rec_flag==0) = 0;
+        Amps_L_aux(idx_onset_B==0) = 0;
+        F_onset_L_aux(idx_onset_B==0) = 0;
+        
+        F_onset_B = F_onset;
+        F_onset_B(idx_onset_B==0) = 0;
+        
+        %
+        extra_cond = F_onset_B > opt.plateau_interior*Amps_L_aux + F_onset_L_aux;
+        idx_onset_B(extra_cond==0) = 0;
+        idx_onset_Actu_B = idx_onset_B(idx_onset_B~=0);
+        idx_end_actu_B = idx_end(idx_onset_B~=0);
+        Amps_actu_B = Amps(idx_onset_B~=0);
+        
+    else
+        
+        idx_end_actu_B = [];
+        idx_onset_Actu_B = [];
+        Amps_actu_B = [];
+        thr_wburst = [];
     end
     
-    idx_onset_B(rec_flag==0) = 0;
-    Amps_L_aux(idx_onset_B==0) = 0;
-    F_onset_L_aux(idx_onset_B==0) = 0;
+    idx_end_actu_All = [idx_end_actu_L;idx_end_actu_B];
+    Amps_actu_All = [Amps_actu_L; Amps_actu_B];
     
-    F_onset_B = F_onset;
-    F_onset_B(idx_onset_B==0) = 0;
+    [idx_onset_actu_All, idx_sort_all] = unique([idx_onset_actu_L;idx_onset_Actu_B]);
+    idx_end_actu_All = idx_end_actu_All(idx_sort_all);
+    Amps_actu_All = Amps_actu_All(idx_sort_all);
     
-    %
-    extra_cond = F_onset_B > opt.plateau_interior*Amps_L_aux + F_onset_L_aux;
-    idx_onset_B(extra_cond==0) = 0;
-    idx_onset_Actu_B = idx_onset_B(idx_onset_B~=0);
-    idx_end_actu_B = idx_end(idx_onset_B~=0);
-    Amps_actu_B = Amps(idx_onset_B~=0);
-        
+    max_len = max(idx_end_actu_All-idx_onset_actu_All);
+    idx_rise_vec_All = coloncatrld(idx_onset_actu_All, idx_end_actu_All);
+    idx_rise_mat_All = reshape(coloncatrld(idx_onset_actu_All, idx_onset_actu_All+max_len),max_len+1,size(idx_onset_actu_All,1))';
+    
+    L_indices_aux = find(ismember(idx_onset_actu_All,idx_onset_actu_L));
+    
 else
     
-    idx_end_actu_B = [];
-    idx_onset_Actu_B = [];
-    Amps_actu_B = [];
+    ZeroEvent_flag = 1;
+    thr_wburst = [];
+    idx_onset_actu_All = [];
+    idx_rise_mat_All = [];
+    idx_rise_vec_All = [];
+    Amps_actu_All = [];
+    L_indices_aux = [];
+    Amps_actu_L = [];
     
 end
-
-idx_end_actu_All = [idx_end_actu_L;idx_end_actu_B];
-Amps_actu_All = [Amps_actu_L; Amps_actu_B];
-
-[idx_onset_actu_All idx_sort_all] = unique([idx_onset_actu_L;idx_onset_Actu_B]);
-idx_end_actu_All = idx_end_actu_All(idx_sort_all);
-Amps_actu_All = Amps_actu_All(idx_sort_all);
-
-max_len = max(idx_end_actu_All-idx_onset_actu_All);
-idx_rise_vec_All = coloncatrld(idx_onset_actu_All, idx_end_actu_All);
-idx_rise_mat_All = reshape(coloncatrld(idx_onset_actu_All, idx_onset_actu_All+max_len),max_len+1,size(idx_onset_actu_All,1))';
-
-L_indices_aux = find(ismember(idx_onset_actu_All,idx_onset_actu_L));
 
 end
 

@@ -211,7 +211,7 @@ for iROI = ROIs_vec
     [fluors, opt] = preprocessing_UFARSA(opt,fluor);
     
     %% Reconstruction
-    [output_UFARSA,opt_out] = reoncstruction_UFARSA(fluors,opt);
+    [output_UFARSA,opt_out] = reconstruction_UFARSA(fluors,opt);
     
     %% store all UFARSA's outputs for all ROIs 
     if ROIs_all_flag || opt.save_ROIs_all
