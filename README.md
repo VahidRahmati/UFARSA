@@ -9,3 +9,4 @@ You can readily setup and then apply UFARSA to your recorded fluorescence traces
 --------------------------------------------------------------------------------------------------------------------------------------
 ### Files history:
 User_Guide.pdf updated: in particular, by adding a hint on the scaled firing rate vectors (see "Useful hints" section).
+reconstruction_UFARSA.m updated: Some Matlab, different version's incompability issues were resolved.
