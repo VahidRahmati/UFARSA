@@ -3,7 +3,11 @@ This repository contains the Matlab codes implementing the UFARSA (Ultra-fast Ac
 
 “**Ultra-Fast Accurate Reconstruction of Spiking Activity from Calcium Imaging Data**”; Vahid Rahmati, Knut Kirmse, Knut Holthoff, Stefan J. Kiebel (2018), Journal of Neurophysiology: https://doi.org/10.1152/jn.00934.2017
 
-You can readily setup and then apply UFARSA to your recorded fluorescence traces (time-courses); please see the **User_Guide.pdf** and the two **demo scripts** in this repository.<br />
+You can readily setup and then apply UFARSA to your recorded fluorescence traces (time-courses); please see the **User_Guide.pdf** and the two **demo scripts** in this repository.
+
+Hint: The current verison of UFARSA has been tested on Matlab 2018.
+
+<br />
 <br />    
 
 --------------------------------------------------------------------------------------------------------------------------------------
