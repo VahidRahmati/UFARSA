@@ -5,8 +5,6 @@ This repository contains the Matlab codes implementing the UFARSA (Ultra-fast Ac
 
 You can readily setup and then apply UFARSA to your recorded fluorescence traces (time-courses); please see the **User_Guide.pdf** and the two **demo scripts** in this repository.
 
-Hint: The current verison of UFARSA has not been tested on Matlab versions later than 2018.
-
 <br />
 <br />    
 
