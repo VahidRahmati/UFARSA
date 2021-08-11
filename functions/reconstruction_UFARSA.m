@@ -89,7 +89,7 @@ if ZeroEvent_flag ~=1 % when there are non-zero amount of detected events
     
     
     %% Demerging: compute the super-resolution event and spike-count trains, by dissecting the merged transients
-    de_merging % an internal function
+    [EventTimes_SR,vector_nSpikes_discrete_SR,idx_onset_Actu_B_SR] = de_merging; % an internal function
     
     
     %% Reconstruction of spiking activity trains: build the final output-vectors of the reconstruction process
@@ -115,7 +115,7 @@ opt_out.ZeroEvent_flag = ZeroEvent_flag;
 %% -----------------------> Local Functions <-----------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 %%
-    function de_merging
+    function [EventTimes_SR,vector_nSpikes_discrete_SR,idx_onset_Actu_B_SR] = de_merging
         % Demerging: compute the super-resolution event- and count-trains, by dissecting the merged transients
         
         vector_nSpikes_discrete_SR = vector_nSpikes_discrete;

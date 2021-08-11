@@ -11,7 +11,7 @@
 % Author: Vahid Rahmati (December, 2017)
 
 
-clear all
+clear 
 clc; 
 close all
 

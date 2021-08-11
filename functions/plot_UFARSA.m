@@ -257,7 +257,7 @@ elseif (opt.plt_cTrain || opt.plt_cTrain_dem || opt.plt_cFR || opt.plt_cFR_dem  
     
 end % End of plotting spiking activities
 
-leg_g = legend(h,legends,'FontSize',13,'orientation','horizental');
+leg_g = legend(h,legends,'FontSize',13,'orientation','horizontal');
 set(leg_g,'Units','normalized');
 leg_pos = get(leg_g,'Position');
 set(leg_g,'Position',[ 0.01 0.95  leg_pos(3) leg_pos(4)])
